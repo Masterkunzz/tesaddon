@@ -88,24 +88,9 @@ async function deleteAddon(id) {
 // BAGIAN 3: LOGIKA DOM (INDEX, SEARCH, ADMIN, DETAIL)
 // ====================================================================
 
-// FUNGSI UTILITY: Membuat Slug Bersih (untuk URL)
-function createSlug(text, id) {
-    // 1. Ubah ke lowercase
-    // 2. Hapus karakter non-alfanumerik (kecuali spasi dan hyphen)
-    // 3. Ganti spasi dengan hyphen
-    const cleanedText = text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '') // Hapus karakter spesial
-        .trim()
-        .replace(/\s+/g, '-');
-        
-    // Gabungkan dengan ID Firestore yang unik
-    return cleanedText + '-' + id; 
-}
-
-
 // FUNGSI UTILITY: Mengubah Newline (\n) menjadi <br>
 function formatDescription(text) {
+    // Pastikan teks di-encode untuk mencegah XSS dan ganti \n dengan <br>
     const safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return safeText.replace(/\n/g, '<br>');
 }
@@ -114,6 +99,7 @@ function formatDescription(text) {
 function createSnippet(text, maxLength = 100) {
     if (!text) return '';
     if (text.length <= maxLength) return text;
+    // Cari spasi terakhir sebelum batas karakter dan tambahkan '...'
     return text.substring(0, maxLength).trim() + '...';
 }
 
@@ -148,7 +134,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 e.preventDefault();
                 const query = searchInput.value.trim();
                 if (query) {
-                    // Search tetap menggunakan parameter query
                     window.location.href = `search.html?q=${encodeURIComponent(query)}`;
                 }
             }
@@ -211,12 +196,11 @@ function renderFrontEndResults(data, container) {
     }
 
     data.forEach(item => {
+        // --- 1. APLIKASI SNIPPET DI SINI ---
         const snippet = createSnippet(item.deskripsi, 100); 
-        const slug = createSlug(item.judul, item.id); // Membuat slug bersih
-
+        
         const card = document.createElement('a');
-        // LINK BARU: Menggunakan SLUG BERSIH
-        card.href = `/addon/${slug}`; 
+        card.href = `detail.html?id=${item.id}`; 
         card.className = 'card';
         card.innerHTML = `
             <img src="${item.gambar}" alt="${item.judul}">
@@ -250,6 +234,7 @@ async function loadDetailPage() {
         return;
     }
     
+    // --- 2. APLIKASI LINE BREAK DI SINI ---
     const formattedDescription = formatDescription(addon.deskripsi);
     
     // Render Konten
@@ -276,6 +261,7 @@ async function loadDetailPage() {
 
 // Fungsi untuk memuat data di Admin Panel
 async function loadAdminPage() {
+    // [Logika Admin Panel]
     const adminForm = document.getElementById('addon-form');
     const deleteListContainer = document.getElementById('delete-list');
     
@@ -362,6 +348,7 @@ async function renderDeleteList(container) {
 // ====================================================================
 
 function showDownloadPopup(adType, targetUrl) {
+    // [Logika Popup Iklan]
     const popup = document.getElementById('download-popup');
     const adContainer = document.getElementById('ad-container');
     const proceedBtn = document.getElementById('btn-proceed');
