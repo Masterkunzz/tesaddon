@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin</title>
+    <title>Panel Admin - AhZanMC</title>
     <link rel="stylesheet" href="style.css">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -25,10 +25,12 @@
             
             <input type="url" id="gambar" placeholder="3. URL Gambar Cover (Contoh: https://via.placeholder.com/300x180)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
             
-            <input type="text" id="link_file" placeholder="4. Nama File Detail HTML (Contoh: ultraman.html) - Harus di folder addon/" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            <input type="url" id="video_url" placeholder="4. Link Embed Video YouTube (Contoh: https://www.youtube.com/embed/XXXXX)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            
+            <input type="url" id="link_download" placeholder="5. Link Mediafire/Download Asli" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
             
             <select id="tipe_iklan" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
-                <option value="" disabled selected>5. Pilih Tipe Iklan Download</option>
+                <option value="" disabled selected>6. Pilih Tipe Iklan Download</option>
                 <option value="3rdparty">Iklan Pihak Ketiga (Timer 15 Detik)</option>
                 <option value="video">Iklan Video Sendiri (Harus Tonton Sampai Selesai)</option>
             </select>
