@@ -13,7 +13,6 @@ const firebaseConfig = {
     measurementId: "G-R7NEB07M3P"
 };
 
-// Pastikan tag SDK sudah ada di file HTML Anda
 let db;
 if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
@@ -22,14 +21,13 @@ if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
 
 
 // ====================================================================
-// BAGIAN 2: LOGIKA CRUD (CREATE, READ, DELETE)
+// BAGIAN 2: LOGIKA CRUD (CREATE, READ, DELETE, READ ONE)
 // ====================================================================
 
-// READ: Mengambil semua data addon
+// READ ALL: Mengambil semua data addon
 async function getAddons() {
     if (!db) return [];
     try {
-        // Mengambil dan mengurutkan berdasarkan waktu dibuat (terbaru di atas)
         const snapshot = await db.collection("addons").orderBy("createdAt", "desc").get();
         const addons = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -41,6 +39,24 @@ async function getAddons() {
         return [];
     }
 }
+
+// READ ONE: Mengambil satu data addon berdasarkan ID
+async function getAddonById(id) {
+    if (!db) return null;
+    try {
+        const doc = await db.collection("addons").doc(id).get();
+        if (doc.exists) {
+            return { id: doc.id, ...doc.data() };
+        } else {
+            console.warn("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching document by ID: ", error);
+        return null;
+    }
+}
+
 
 // CREATE: Menambahkan addon baru (Admin Panel)
 async function addAddon(data) {
@@ -69,11 +85,11 @@ async function deleteAddon(id) {
 
 
 // ====================================================================
-// BAGIAN 3: LOGIKA DOM (INDEX, SEARCH, ADMIN)
+// BAGIAN 3: LOGIKA DOM (INDEX, SEARCH, ADMIN, DETAIL)
 // ====================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Theme Toggle & Search Input (Logika Lama)
+    // [Logika Theme Toggle & Search Input di sini]
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
 
@@ -110,17 +126,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // 2. Tentukan Halaman yang dimuat dan ambil data dari Firebase
     if (document.title.includes('Panel Admin')) {
-        // Hanya memuat logika Admin
         await loadAdminPage();
+    } else if (document.title.includes('Detail Addon')) {
+        // Halaman Detail Addon Universal
+        await loadDetailPage();
     } else {
-        // Memuat Index atau Search
+        // Halaman Index atau Search
         await loadFrontEndPage();
     }
 });
 
 // Fungsi untuk memuat data di Index dan Search
 async function loadFrontEndPage() {
-    const databaseAddons = await getAddons(); // Mengambil data dari Firebase
+    const databaseAddons = await getAddons();
 
     // Halaman Index
     const indexAddonGrid = document.querySelector('.addon-grid');
@@ -150,11 +168,11 @@ async function loadFrontEndPage() {
     }
 }
 
-// Fungsi untuk merender Kartu (Digunakan di Index & Search)
+// FUNGSI UTAMA: Mengarahkan Link ke Detail Page Universal
 function renderFrontEndResults(data, container) {
     container.innerHTML = '';
     
-    if (document.title.includes('Addon Directory')) { // Khusus Index, tampilkan 4 terbaru
+    if (document.title.includes('Addon Directory')) {
         data = data.slice(0, 4);
     }
     
@@ -165,7 +183,8 @@ function renderFrontEndResults(data, container) {
 
     data.forEach(item => {
         const card = document.createElement('a');
-        card.href = item.link;
+        // LINK SEKARANG MENGARAH KE DETAIL PAGE UNIVERSAL + ID
+        card.href = `detail.html?id=${item.id}`; 
         card.className = 'card';
         card.innerHTML = `
             <img src="${item.gambar}" alt="${item.judul}">
@@ -178,14 +197,62 @@ function renderFrontEndResults(data, container) {
     });
 }
 
+// FUNGSI BARU: Memuat data dan merender Halaman Detail Dinamis
+async function loadDetailPage() {
+    const params = new URLSearchParams(window.location.search);
+    const addonId = params.get('id');
+    const detailContent = document.getElementById('detail-content');
+
+    if (!addonId || !detailContent) {
+        detailContent.innerHTML = '<h1>Error 404</h1><p>Addon tidak ditemukan atau ID tidak valid.</p>';
+        return;
+    }
+
+    detailContent.innerHTML = '<h1>Loading...</h1><p>Mengambil data dari database...</p>';
+    
+    const addon = await getAddonById(addonId);
+    
+    if (!addon) {
+        detailContent.innerHTML = '<h1>Addon Tidak Ditemukan</h1><p>ID: ' + addonId + ' tidak terdaftar.</p>';
+        document.title = '404 Not Found';
+        return;
+    }
+    
+    // Render Konten
+    document.title = addon.judul + ' - AhZanMC';
+
+    // ASUMSI: Setiap Addon yang di-input admin punya field berikut:
+    // - judul, deskripsi, gambar
+    // - link_download (Tambahkan field ini di Admin Panel jika belum ada)
+    // - tipe_iklan
+    
+    // Konten Detail
+    detailContent.innerHTML = `
+        <h1>${addon.judul}</h1>
+        <img src="${addon.gambar}" class="detail-img" alt="${addon.judul}">
+        
+        <p style="font-size: 1.1rem; line-height: 1.6;">${addon.deskripsi}</p>
+        <br>
+        
+        <h3>Preview:</h3>
+        <iframe class="detail-video" src="${addon.video_url || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}" frameborder="0" allowfullscreen></iframe>
+        
+        <div class="download-btn-container">
+            <button class="btn-download" onclick="showDownloadPopup('${addon.tipe_iklan}', '${addon.link_download || 'https://www.mediafire.com/default-link'}')">
+                DOWNLOAD SEKARANG (${addon.tipe_iklan === 'video' ? 'Video Ad' : 'Banner Ad'}) ⬇️
+            </button>
+        </div>
+    `;
+}
+
 
 // Fungsi untuk memuat data di Admin Panel
 async function loadAdminPage() {
+    // [Logika Admin Panel tetap sama]
     const adminForm = document.getElementById('addon-form');
     const deleteListContainer = document.getElementById('delete-list');
     
     if (adminForm) {
-        // PASTIKAN LISTENER HANYA DITAMBAHKAN SEKALI
         if (!adminForm.dataset.listenerAdded) {
             
             // Logika Add (CREATE)
@@ -198,9 +265,14 @@ async function loadAdminPage() {
                     judul: document.getElementById('judul').value,
                     deskripsi: document.getElementById('deskripsi').value,
                     gambar: document.getElementById('gambar').value,
-                    link: `addon/${document.getElementById('link_file').value}`,
-                    tipe_iklan: document.getElementById('tipe_iklan').value, // DATA BARU
+                    // Kita tidak lagi perlu field link_file, tapi kita butuh link_download
+                    link_download: document.getElementById('link_download').value, // <-- GANTI ID INI DI ADMIN.HTML
+                    tipe_iklan: document.getElementById('tipe_iklan').value,
+                    video_url: document.getElementById('video_url').value, // Tambahkan ini di Admin.html
                 };
+                
+                // Tambahkan field 'link' untuk kompatibilitas yang mengarah ke detail.html?id=
+                // NOTE: Kita tidak menggunakan data.link di addAddon, tapi ID dokumen
                 
                 const result = await addAddon(data);
                 if (result.success) {
@@ -213,7 +285,7 @@ async function loadAdminPage() {
                 statusPesan.innerText = result.message;
             });
             
-            adminForm.dataset.listenerAdded = true; // Tandai sudah ditambahkan
+            adminForm.dataset.listenerAdded = true;
         }
     }
     
@@ -229,7 +301,7 @@ async function loadAdminPage() {
                     e.target.innerText = 'Menghapus...';
                     const result = await deleteAddon(docId);
                     if (result.success) {
-                        await renderDeleteList(deleteListContainer); // Muat ulang
+                        await renderDeleteList(deleteListContainer);
                     } else {
                         alert(result.message);
                     }
@@ -254,7 +326,7 @@ async function renderDeleteList(container) {
         const li = document.createElement('li');
         li.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom: 1px solid var(--text-sub);';
         li.innerHTML = `
-            <span><strong>${addon.judul}</strong><br><small style="color:var(--text-sub);">${addon.link} | Iklan: ${addon.tipe_iklan || 'N/A'}</small></span>
+            <span><strong>${addon.judul}</strong><br><small style="color:var(--text-sub);">Iklan: ${addon.tipe_iklan || 'N/A'}</small></span>
             <button class="delete-btn" data-id="${addon.id}" style="background: red; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Hapus</button>
         `;
         container.appendChild(li);
@@ -267,6 +339,7 @@ async function renderDeleteList(container) {
 // ====================================================================
 
 function showDownloadPopup(adType, targetUrl) {
+    // [Logika Popup Iklan tetap sama]
     const popup = document.getElementById('download-popup');
     const adContainer = document.getElementById('ad-container');
     const proceedBtn = document.getElementById('btn-proceed');
@@ -279,7 +352,7 @@ function showDownloadPopup(adType, targetUrl) {
 
     if (adType === 'video') {
         const video = document.createElement('video');
-        video.src = 'tesiklan.mp4'; 
+        video.src = 'assets/tesiklan.mp4'; 
         video.controls = true;
         video.style.width = '100%';
         video.autoplay = true;
@@ -320,5 +393,4 @@ function activateButton(btn, url) {
 function closePopup() {
     document.getElementById('download-popup').style.display = 'none';
     document.getElementById('ad-container').innerHTML = ''; 
-
 }
