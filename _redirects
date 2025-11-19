@@ -1,1 +1,1 @@
-const slug = new URLSearchParams(window.location.search).get('slug');
+/:slug   /detail.html?slug=:slug   200
