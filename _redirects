@@ -1,1 +1,1 @@
-/addon/:slug-:id /detail.html?id=:id 200
+const slug = new URLSearchParams(window.location.search).get('slug');
