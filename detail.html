@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Addon - AhZanMC</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">AhZanMC</a></div>
+        <div class="search-container"><input type="text" id="search-input" placeholder="Cari..."></div>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </header>
+
+    <div class="container">
+        <div id="detail-content" class="detail-content">
+            <h1>Memuat Konten...</h1>
+        </div>
+    </div>
+
+    <div id="download-popup" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            
+            <h3>Link Sedang Disiapkan...</h3>
+            <p style="font-size: 0.9rem; color: #666;">Bantu kami dengan melihat iklan sebentar ya!</p>
+            
+            <div id="ad-container" style="min-height: 100px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            </div>
+
+            <button id="btn-proceed" class="btn-proceed" disabled>Memuat...</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
