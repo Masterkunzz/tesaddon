@@ -1,0 +1,6 @@
+/*
+  Content Security Policy for enabling Firebase SDK and Ad Scripts
+*/
+
+/
+  Content-Security-Policy: script-src 'self' https://www.gstatic.com https://www.highperformanceformat.com 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://firestore.googleapis.com
