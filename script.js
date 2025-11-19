@@ -352,7 +352,7 @@ function showDownloadPopup(adType, targetUrl) {
 
     if (adType === 'video') {
         const video = document.createElement('video');
-        video.src = 'assets/tesiklan.mp4'; 
+        video.src = 'tesiklan.mp4'; 
         video.controls = true;
         video.style.width = '100%';
         video.autoplay = true;
@@ -394,3 +394,4 @@ function closePopup() {
     document.getElementById('download-popup').style.display = 'none';
     document.getElementById('ad-container').innerHTML = ''; 
 }
+
