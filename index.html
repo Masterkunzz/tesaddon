@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addon MC by Pakdhe Ahmad</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Master Ahmad</div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Cari addon...">
+        </div>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </header>
+
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2>Add-on Terbaru</h2>
+           
+        </div>
+        
+        <div class="addon-grid">
+            <p style="grid-column: 1/-1;">Sedang memuat data dari database...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pencarian</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">Master Ahmad</a></div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Cari lagi...">
+        </div>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Hasil pencarian untuk: <span id="search-keyword" style="color: var(--accent);">...</span></h2>
+        
+        <div id="search-results-container" class="addon-grid">
+            <p>Sedang mencari...</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="index.html" style="color: var(--text-sub); text-decoration: none;">&larr; Kembali ke Beranda</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

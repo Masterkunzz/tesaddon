@@ -1,0 +1,164 @@
+/* --- CSS Variables untuk Tema --- */
+:root {
+    --bg-body: #f5f7fa;
+    --bg-card: #ffffff;
+    --text-main: #333333;
+    --text-sub: #666666;
+    --accent: #3498db;
+    --header-bg: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Kelas Dark Mode */
+.dark-mode {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-sub: #a0a0a0;
+    --accent: #bb86fc;
+    --header-bg: #1e1e1e;
+    --shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- Header --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: var(--header-bg);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo { font-size: 1.5rem; font-weight: bold; color: var(--text-main); }
+
+.search-container input {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background: var(--bg-body);
+    color: var(--text-main);
+}
+
+.theme-toggle {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-main);
+}
+
+/* --- Grid Layout (Index) --- */
+.container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+
+.addon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.card img { width: 100%; height: 180px; object-fit: cover; }
+
+.card-content { padding: 15px; }
+.card-title { font-size: 1.1rem; margin-bottom: 8px; font-weight: bold; }
+.card-desc { font-size: 0.9rem; color: var(--text-sub); line-height: 1.4; }
+
+/* --- Halaman Detail --- */
+.detail-content { background: var(--bg-card); padding: 30px; border-radius: 12px; }
+.detail-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+.detail-video { width: 100%; height: 400px; margin: 20px 0; border-radius: 8px; }
+
+/* --- Tombol Download Mencolok --- */
+.download-btn-container { text-align: center; margin-top: 40px; }
+
+.btn-download {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    padding: 15px 50px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 75, 43, 0.5);
+    animation: pulse 2s infinite;
+    text-decoration: none;
+    display: inline-block;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 75, 43, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
+}
+
+/* --- Popup Iklan --- */
+.popup-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+}
+
+.close-popup { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.5rem; }
+
+.ad-placeholder {
+    background: #eee;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+    border-radius: 8px;
+    color: black;
+}
+
+.btn-proceed {
+    background-color: #2ecc71;
+    color: white;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-proceed.active { cursor: pointer; opacity: 1; }
