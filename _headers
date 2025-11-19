@@ -1,2 +1,0 @@
-/
-  Content-Security-Policy: script-src 'self' https://www.gstatic.com https://www.highperformanceformat.com 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://firestore.googleapis.com https://www.gstatic.com wss://*.firebaseio.com
