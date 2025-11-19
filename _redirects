@@ -1,2 +1,1 @@
-# Redirects untuk Clean URL Addons
 /addon/:slug-:id /detail.html?id=:id 200
