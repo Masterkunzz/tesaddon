@@ -1,78 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin - Add Addon</title>
-<link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - AhZanMC</title>
+    <link rel="stylesheet" href="/style.css"> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
-<div class="admin-container">
-<h2>Tambah Addon</h2>
+    <header>
+        <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">Panel Admin (Database)</a></div>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </header>
 
+    <div class="container" style="max-width: 800px;">
+        <h2 style="color: var(--accent);">➕ Tambah Addon Baru</h2>
+        <form id="addon-form" style="display:flex; flex-direction:column; gap:15px; background: var(--bg-card); padding: 20px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 40px;">
+            
+            <input type="text" id="judul" placeholder="1. Judul Addon (Contoh: Mecha Robot)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            
+            <textarea id="deskripsi" placeholder="2. Deskripsi LENGKAP (Gunakan Enter untuk baris baru)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; height: 120px; background: var(--bg-body); color: var(--text-main);"></textarea>
+            
+            <input type="url" id="gambar" placeholder="3. URL Gambar Cover (Contoh: https://via.placeholder.com/300x180)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            
+            <input type="url" id="video_url" placeholder="4. Link Embed Video YouTube (Contoh: https://www.youtube.com/embed/XXXXX)" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            
+            <input type="url" id="link_download" placeholder="5. Link Mediafire/Download Asli" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+            
+            <select id="tipe_iklan" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: var(--bg-body); color: var(--text-main);">
+                <option value="" disabled selected>6. Pilih Tipe Iklan Download</option>
+                <option value="3rdparty">Iklan Pihak Ketiga (Timer 15 Detik)</option>
+                <option value="video">Iklan Video Sendiri (Harus Tonton Sampai Selesai)</option>
+            </select>
+            
+            <button type="submit" style="padding: 15px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 10px;">
+                SIMPAN ADDON KE FIREBASE
+            </button>
+            <p id="status-pesan" style="text-align:center; color: var(--accent); font-weight: bold;"></p>
+        </form>
 
-<input type="text" id="name" placeholder="Nama Addon" />
-<textarea id="desc" placeholder="Deskripsi"></textarea>
-<input type="text" id="image" placeholder="Link Gambar" />
-<input type="text" id="download" placeholder="Link Download" />
+        <h2 style="color: var(--accent);">🗑️ Hapus / Kelola Addon</h2>
+        <p style="margin-bottom: 15px;">Klik tombol 'Hapus' di samping Addon yang ingin Anda hapus dari database.</p>
+        
+        <ul id="delete-list" style="list-style: none; padding: 0; background: var(--bg-card); border-radius: 8px; box-shadow: var(--shadow); padding: 10px 20px;">
+            <li>Memuat data...</li>
+        </ul>
+        
+    </div>
 
-
-<button id="submit">Submit</button>
-</div>
-
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-getFirestore,
-collection,
-addDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-
-const firebaseConfig = {
-apiKey: "",
-authDomain: "",
-projectId: "",
-storageBucket: "",
-messagingSenderId: "",
-appId: ""
-};
-
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-
-function makeSlug(text) {
-return text
-.toLowerCase()
-.replace(/[^a-z0-9]+/g, "-")
-.replace(/(^-|-$)/g, "");
-}
-
-
-document.getElementById("submit").onclick = async () => {
-const name = document.getElementById("name").value;
-const desc = document.getElementById("desc").value;
-const image = document.getElementById("image").value;
-const download = document.getElementById("download").value;
-
-
-const slug = makeSlug(name);
-
-
-await addDoc(collection(db, "addons"), {
-name,
-desc,
-image,
-downloadUrl: download,
-slug
-});
-
-
-alert("Addon Berhasil Ditambahkan!");
-};
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
