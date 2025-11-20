@@ -238,7 +238,7 @@ async function loadDetailPage() {
     const formattedDescription = formatDescription(addon.deskripsi);
     
     // Render Konten
-    document.title = addon.judul + ' - AhZanMC';
+    document.title = addon.judul + ' - MasterAhmad';
 
     detailContent.innerHTML = `
         <h1>${addon.judul}</h1>
@@ -361,7 +361,7 @@ function showDownloadPopup(adType, targetUrl) {
 
     if (adType === 'video') {
         const video = document.createElement('video');
-        video.src = 'assets/tesiklan.mp4'; 
+        video.src = 'iklanketua.mp4'; 
         video.controls = true;
         video.style.width = '100%';
         video.autoplay = true;
@@ -403,3 +403,4 @@ function closePopup() {
     document.getElementById('download-popup').style.display = 'none';
     document.getElementById('ad-container').innerHTML = ''; 
 }
+
