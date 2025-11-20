@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shortlink Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { padding: 10px; margin: 6px 0; width: 100%; }
+    #result { margin-top: 12px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Shortlink Generator</h2>
+  <p>Masukkan ID Addon (dari detail.html?id=XXXXX) lalu klik tombol untuk membuat shortlink otomatis.</p><label>ID Addon:</label> <input id="addonId" placeholder="contoh: mogftWufZGutllcrhJF3" />
+
+<label>Nama Shortlink:</label> <input id="slug" placeholder="contoh: tung-tung-sahur-mcpe" />
+
+<button onclick="generate()">Buat Shortlink</button>
+
+  <div id="result"></div>  <script>
+    async function generate() {
+      const id = document.getElementById('addonId').value.trim();
+      const slug = document.getElementById('slug').value.trim();
+
+      if (!id || !slug) {
+        alert('Isi ID addon dan nama shortlink.');
+        return;
+      }
+
+      const newEntry = `"${slug}": "${id}"`;
+
+      document.getElementById('result').innerHTML = `
+        Tambahkan ke <b>shortlinks.json</b>:<br><br>
+        <code>{ ${newEntry} }</code><br><br>
+        URL Shortened:<br>
+        <a href="/${slug}" target="_blank">addon.masterahmad.site/${slug}</a>
+      `;
+    }
+  </script></body>
+</html><!-- Auto Generate Shortlink JSON Page --><!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Shortlink Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { padding: 10px; margin: 5px 0; width: 100%; }
+    .box { max-width: 450px; margin: auto; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Auto Shortlink Generator</h2>
+    <input type="text" id="slug" placeholder="nama-addon (slug)" />
+    <input type="text" id="iddata" placeholder="Firebase Document ID" />
+    <button onclick="generate()">Generate Shortlink File</button>
+    <p id="status"></p>
+  </div><script>
+function generate() {
+  let slug = document.getElementById('slug').value.trim();
+  let id = document.getElementById('iddata').value.trim();
+
+  if (!slug || !id) {
+    alert('Isi slug dan ID terlebih dahulu');
+    return;
+  }
+
+  let html = `<!DOCTYPE html>
+<html>
+<meta http-equiv="refresh" content="0; url=/detail.html?id=${id}" />
+</html>`;
+
+  let blob = new Blob([html], { type: 'text/html' });
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = slug + '.html';
+  a.click();
+
+  document.getElementById('status').innerText = 'File berhasil dibuat: ' + slug + '.html';
+}
+</script></body>
+</html>
